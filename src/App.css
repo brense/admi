@@ -1,24 +1,8 @@
-.App {
-  text-align: center;
-}
-
-.App-logo {
-  animation: App-logo-spin infinite 20s linear;
-  height: 80px;
-}
-
-.App-header {
-  background-color: #222;
-  height: 150px;
-  padding: 20px;
-  color: white;
-}
-
-.App-intro {
-  font-size: large;
-}
-
-@keyframes App-logo-spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
+.App { display: flex; height: 100%; }
+main { flex: auto; overflow: auto; }
+.drawer { display: flex; width:260px; }
+.drawer > div { width:260px; }
+.drawer > div > * { flex:none; }
+.drawer > div > ul { padding: 0; }
+.drawer > div > ul.navigation { flex: auto; }
+.drawer .active { background:#eee; }
