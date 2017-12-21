@@ -23,12 +23,20 @@ import Tax from './Tax';
 import Help from './Help';
 import Login from './Login';
 
+import * as moment from 'moment'
+import 'moment/locale/nl';
+moment.locale('nl')
+
 injectTapEventPlugin();
 
 const theme = createMuiTheme({
   palette: {
-    primary: blue,
-    secondary: pink,
+    primary: { ...blue,
+      500: '#2962FF' // A700
+    },
+    secondary: { ...pink,
+      A200: '#F50057' // A400
+    }
   }
 });
 

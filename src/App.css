@@ -6,3 +6,11 @@ main { flex: auto; overflow: auto; }
 .drawer > div > ul { padding: 0; }
 .drawer > div > ul.navigation { flex: auto; }
 .drawer .active { background:#eee; }
+
+button.mainActionButton { position:absolute; bottom:24px; right:24px; }
+
+.masonry-feed { padding:12px; box-sizing: border-box; }
+.masonry-card, .grid-sizer { width:33.33%; }
+.masonry-card { box-sizing: border-box; padding:12px; }
+.masonry-card .MuiCardContent-root-130 { padding-top: 0; }
+.masonry-card .MuiCardContent-root-130.MuiCardHeader-root-124 { padding-top: 16px; }
