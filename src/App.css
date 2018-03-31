@@ -1,11 +1,11 @@
 .App { display: flex; height: 100%; }
 main { flex: auto; overflow: auto; }
-.drawer { display: flex; width:260px; }
-.drawer > div { width:260px; }
+.drawer { display: flex; width:280px; }
+.drawer > div { width:280px; }
 .drawer > div > * { flex:none; }
 .drawer > div > ul { padding: 0; }
 .drawer > div > ul.navigation { flex: auto; }
-.drawer .active { background:#eee; }
+.drawer .active { background:rgba(0,0,0,0.08); }
 
 button.mainActionButton { position:absolute; bottom:24px; right:24px; }
 
