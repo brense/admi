@@ -10,7 +10,13 @@
     "@types/react-swipeable-views": "^0.12.1",
     "@types/react-tap-event-plugin": "0.0.30",
     "axios": "^0.18.0",
+    "body-parser": "^1.18.2",
+    "cors": "^2.8.4",
     "downshift": "^1.31.2",
+    "express": "^4.16.3",
+    "file-system": "^2.2.2",
+    "http": "0.0.0",
+    "jsonwebtoken": "^8.2.0",
     "material-design-icons": "^3.0.1",
     "material-ui": "^1.0.0-beta.39",
     "material-ui-icons": "^1.0.0-beta.36",
@@ -18,6 +24,7 @@
     "mobx": "^4.1.1",
     "mobx-react": "^5.0.0",
     "moment": "^2.21.0",
+    "path": "^0.12.7",
     "prop-types": "^15.6.1",
     "react": "^16.3.0",
     "react-dom": "^16.3.0",
@@ -28,19 +35,25 @@
     "react-swipeable-views": "^0.12.13",
     "react-tap-event-plugin": "^3.0.2",
     "rxjs": "^5.5.8",
+    "socket.io": "^2.1.0",
+    "socketio-jwt": "^4.5.0",
     "typeface-roboto": "0.0.45"
   },
   "scripts": {
-    "start": "react-scripts-ts start",
+    "start": "set PORT=3000 && react-scripts-ts start",
+    "prebuild": "mv build/data data",
     "build": "react-scripts-ts build",
+    "postbuild": "mv data build/data && set PORT=80 && npm run compile",
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
-    "server": "cd server && php -S localhost:3001"
+    "compile": "tsc --outDir ./build --module commonjs ./src/server/server.ts && node ./build/server.js",
+    "server": "rm ./build/server.js && nodemon -e ts  --exec \"set PORT=3001 && npm run compile\""
   },
   "devDependencies": {
     "@types/jest": "^21.1.10",
     "@types/node": "^8.10.1",
     "@types/react": "^16.1.0",
-    "@types/react-dom": "^16.0.4"
+    "@types/react-dom": "^16.0.4",
+    "nodemon": "^1.17.3"
   }
 }

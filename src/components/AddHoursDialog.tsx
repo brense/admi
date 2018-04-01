@@ -33,7 +33,7 @@ class AddHoursDialog extends BasicDialog {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3001/project').then((response: { data: {}[]}) => {
+    axios.get('http://localhost:3001/api/project').then((response: { data: {}[]}) => {
       ProjectStore.projects = response.data;
     });
   }
@@ -157,11 +157,12 @@ class AddHoursDialog extends BasicDialog {
     let projectId: string | null = this.state.project.id;
     new Promise((resolve: () => void, reject: () => void) => {
       if (!projectId) {
-        axios.post('http://localhost:3001/project', this.state.project).then((response: { data: { id: string } }) => {
-          projectId = response.data.id;
-          ProjectStore.projects.push(response.data);
-          resolve();
-        });
+        axios.post('http://localhost:3001/api/project', this.state.project)
+          .then((response: { data: { id: string } }) => {
+            projectId = response.data.id;
+            ProjectStore.projects.push(response.data);
+            resolve();
+          });
       } else {
         resolve();
       }
@@ -172,7 +173,7 @@ class AddHoursDialog extends BasicDialog {
         date: this.state.date.toDate().toString(),
         project: projectId
       };
-      axios.post('http://localhost:3001/hour', hours).then((response: { data: {} }) => {
+      axios.post('http://localhost:3001/api/hour', hours).then((response: { data: {} }) => {
         HourStore.hours.push(response.data);
       });
       this.setState(initialState);

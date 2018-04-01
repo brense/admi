@@ -22,10 +22,10 @@ class Hours extends React.Component {
   }
 
   componentDidMount() {
-    axios.get('http://localhost:3001/hour').then((response: { data: {}[] }) => {
+    axios.get('http://localhost:3001/api/hour').then((response: { data: {}[] }) => {
       HourStore.hours = response.data;
     });
-    axios.get('http://localhost:3001/project').then((response: { data: {}[] }) => {
+    axios.get('http://localhost:3001/api/project').then((response: { data: {}[] }) => {
       ProjectStore.projects = response.data;
     });
   }
