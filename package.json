@@ -47,7 +47,7 @@
     "test": "react-scripts-ts test --env=jsdom",
     "eject": "react-scripts-ts eject",
     "compile": "tsc --outDir ./build --module commonjs ./src/server/server.ts && node ./build/server.js",
-    "server": "rm ./build/server.js && nodemon -e ts  --exec \"set PORT=3001 && npm run compile\""
+    "server": "rm -f ./build/server.js && nodemon -e ts  --exec \"set PORT=3001 && npm run compile\""
   },
   "devDependencies": {
     "@types/jest": "^21.1.10",

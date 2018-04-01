@@ -76,7 +76,7 @@ class Hours extends React.Component {
               <TableCell padding="checkbox">
                 <Checkbox
                   indeterminate={this.state.selected.length > 0 && this.state.selected.length < HourStore.hours.length}
-                  checked={this.state.selected.length === HourStore.hours.length}
+                  checked={this.state.selected.length > 0 && this.state.selected.length === HourStore.hours.length}
                   onChange={() => this.toggleAll(HourStore.hours)}
                 />
               </TableCell>

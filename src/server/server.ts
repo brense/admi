@@ -61,16 +61,23 @@ class HttpServer {
       // TODO: get company hash from jwt token
       const companyHash = 'mycompanyhash';
       const handler = RestApiHandler.init(companyHash);
-      const response = handler.resolve(
-        req.method,
-        req.params.resource,
-        req.params.id,
-        req.params.subset,
-        req.query,
-        req.body
-      );
-      // TODO: catch errors and send error codes
-      res.send(response);
+      try {
+        const response = handler.resolve(
+          req.method,
+          req.params.resource,
+          req.params.id,
+          req.params.subset,
+          req.query,
+          req.body
+        );
+        res.send(response);
+      } catch (error) {
+        if (error.code && error.message) {
+          res.status(error.code).send(error.message);
+        } else {
+          res.sendStatus(500);
+        }
+      }
     });
     return api;
   }
@@ -107,7 +114,7 @@ class RestApiHandler {
         case 'GET':
           return (id) ? this.retrieve(id) : this.list();
         case 'PUT':
-          return (id) ? this.replace(body) : this.replaceCollection(body as {}[]);
+          return (id) ? this.replace(body as { id: string }) : this.replaceCollection(body as { id: string }[]);
         case 'POST':
           let returnSingle = true;
           let items = [body];
@@ -131,7 +138,7 @@ class RestApiHandler {
           break;
       }
     } else {
-      // TODO: 404
+      throw({ code: 404, message: 'Resource not found' });
     }
   }
 
@@ -145,7 +152,7 @@ class RestApiHandler {
       }
     });
     if (!match) {
-      // TODO: not found...
+      throw({ code: 404, message: 'Resource not found' });
     }
     return match;
   }
@@ -155,12 +162,28 @@ class RestApiHandler {
     return JSON.parse(contents);
   }
 
-  private replace(item: {}) {
-    // TODO:
+  private replace(item: { id: string }) {
+    const original = this.list();
+    original.forEach((old: { id: string }) => {
+      if (old.id === item.id) {
+        old = item;
+      }
+    });
+    fs.writeFileSync(this.resource, JSON.stringify(original));
+    return true;
   }
 
   private replaceCollection(items: {}[]) {
-    // TODO:
+    const original = this.list();
+    original.forEach((old: { id: string }) => {
+      items.forEach((item: { id: string }) => {
+        if (old.id === item.id) {
+          old = item;
+        }
+      });
+    });
+    fs.writeFileSync(this.resource, JSON.stringify(original));
+    return true;
   }
 
   private create(items: {}[]) {
@@ -174,17 +197,39 @@ class RestApiHandler {
   }
 
   private delete(id: string) {
-    // TODO:
+    const original = this.list();
+    const newItems = [];
+    original.forEach((item: { id: string }) => {
+      if (item.id !== id) {
+        newItems.push(item);
+      }
+    });
+    fs.writeFileSync(this.resource, JSON.stringify(newItems));
+    return true;
   }
 
   private deleteCollection(ids: string[]) {
-    // TODO:
+    const original = this.list();
+    const newItems = [];
+    original.forEach((item: { id: string }) => {
+      let match = false;
+      ids.forEach(id => {
+        if (item.id === id) {
+          match = true;
+        }
+      });
+      if (!match) {
+        newItems.push(item);
+      }
+    });
+    fs.writeFileSync(this.resource, JSON.stringify(newItems));
+    return true;
   }
 
   private makeid() {
     var text = '';
     var possible = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-    for (var i = 0; i < 5; i++) {
+    for (var i = 0; i < 32; i++) {
       text += possible.charAt(Math.floor(Math.random() * possible.length));
     }
     return text;
@@ -211,7 +256,11 @@ class SocketServer {
     }));
 
     this.io.on('connection', (socket: SocketIO.Socket) => {
-      this.clients[socket.id] = socket; // TODO: add sockets to their own companies pool of sockets...
+      const companyHash = 'mycompanyhash'; // TODO: get company hash from jwt
+      if (!this.clients[companyHash]) {
+        this.clients[companyHash] = {};
+      }
+      this.clients[companyHash][socket.id] = socket;
       socket.on('disconnect', () => {
         delete this.clients[socket.id];
       });
