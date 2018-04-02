@@ -8,7 +8,8 @@ import registerServiceWorker from './registerServiceWorker';
 import './index.css';
 import * as injectTapEventPlugin from 'react-tap-event-plugin';
 import { BrowserRouter as Router, Route, Redirect, Switch } from 'react-router-dom';
-import { PrivateRoute } from './lib/Auth';
+import { PrivateRoute, Auth } from './lib/Auth';
+import Gapi from './lib/Gapi';
 import App from './App';
 import {
   Dashboard, Finances, Profile, Settings, Hours, Expenses, Invoice,
@@ -35,6 +36,18 @@ const theme = createMuiTheme({
       A200: '#F50057' // A400
     }
   }
+});
+
+Gapi.init({
+  clientId: '312273700917-cshh30k7442t7v1e0gl73lub68ne7uv3.apps.googleusercontent.com',
+  scope: 'https://www.googleapis.com/auth/admin.directory.user.readonly'
+});
+
+Gapi.onLoad().then(() => {
+  Gapi.authorize().then((result) => {
+    console.log('auth', result);
+    Auth.init(); // TODO: implement Auth.init...
+  });
 });
 
 ReactDOM.render(

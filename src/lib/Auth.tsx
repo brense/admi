@@ -3,6 +3,9 @@ import { Route, Redirect, withRouter } from 'react-router-dom';
 import { Subject } from 'rxjs/Subject';
 
 export const Auth = {
+  init: () => {
+    // TODO:
+  },
   isAuthenticated: (privs: string) => {
     // TODO: actually check privs
     return true;
@@ -38,20 +41,20 @@ export const Logout = withRouter(({ history, children }) => (
 
 export const PrivateRoute = (
   { component: Component, privs, ...rest }:
-  { component: React.ComponentClass<{}>, privs: string, path?: string, exact?: boolean }) => (
-  <Route
-    {...rest}
-    render={props => (
-      Auth.isAuthenticated(privs) ? (<Component {...props} />) : (
-        <Redirect
-          to={{
-            pathname: '/login',
-            state: { from: props.location }
-          }}
-        />
-      )
-    )}
-  />
-);
+    { component: React.ComponentClass<{}>, privs: string, path?: string, exact?: boolean }) => (
+    <Route
+      {...rest}
+      render={props => (
+        Auth.isAuthenticated(privs) ? (<Component {...props} />) : (
+          <Redirect
+            to={{
+              pathname: '/login',
+              state: { from: props.location }
+            }}
+          />
+        )
+      )}
+    />
+  );
 
 export default Auth;

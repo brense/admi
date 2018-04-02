@@ -52,6 +52,19 @@ class Hours extends React.Component {
     }
   }
 
+  deleteSelected(ids: string[]) {
+    axios.delete('http://localhost:3001/api/hour?ids=' + ids.join()).then((response: {}) => {
+      const newHours: {}[] = [];
+      HourStore.hours.forEach((item: {id: string}) => {
+        if (ids.indexOf(item.id) === -1) {
+          newHours.push(item);
+        }
+      });
+      HourStore.hours = newHours;
+      this.setState({ selected: [] });
+    });
+  }
+
   render() {
     return (
       <div>
@@ -63,7 +76,7 @@ class Hours extends React.Component {
                 <Typography variant="subheading" color="inherit" style={{display: 'inline'}}>
                   {this.state.selected.length} Geselecteerd
                 </Typography>
-                <IconButton color="inherit">
+                <IconButton onClick={() => this.deleteSelected(this.state.selected)} color="inherit">
                   <Icon>delete</Icon>
                 </IconButton>
               </div>

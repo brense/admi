@@ -101,7 +101,7 @@ class RestApiHandler {
     resource: string,
     id?: string,
     subset?: string,
-    params?: { ids?: string[] },
+    params?: { ids?: string },
     body?: {}
   ) {
     if (subset) {
@@ -131,7 +131,7 @@ class RestApiHandler {
           if (id) {
             return this.delete(id);
           } else if (params.ids) {
-            return this.deleteCollection(params.ids);
+            return this.deleteCollection(params.ids.split(','));
           }
           break;
         default:
